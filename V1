@@ -1,15 +1,25 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <math.h>
+#include <dirent.h>
+#include <time.h>
+#include <string.h>
+#include <inttypes.h>
+#include <pthread.h>
 
-//initialize all variables
+#include "rp.h"
+
+// Constants
+#define M_PI 3.14159265358979323846
+#define BUFFER_SIZE (16 * 1024)
+#define SYNC_BUFFER_SIZE 100
+
+// Global variables
 float *x_in;
 float *x_out;
-float ascale = 1.005;
-int p_step = 1000;
-int trig_delay; // + 500
-int t1 = 7830;  //16384+3900;
-int t2 = 8150;  //3900+16384+1200;
+int buff_size = BUFFER_SIZE;
+int trig_delay;
 
 // Function to calculate Hamming distance between two strings of equal length
 int hamming_distance(const char *s1, const char *s2, int length) {
@@ -49,9 +59,7 @@ int find_min_hamming_position(const char *x_in, const char *x_out) {
     return min_position;
 }
 
-
-
-static inline void get_xin() \*generating x_in and reading x_out*\
+static inline void get_xin()
 {
     // Fill DAC buffer
     rp_GenArbWaveform(RP_CH_2, x_out, buff_size);
@@ -95,14 +103,67 @@ static inline void get_xin() \*generating x_in and reading x_out*\
 
 int main() {
 
-    int position = find_min_hamming_position(x_in, x_out);
+
+  
+
+// Function for Red Pitaya data acquisition
+void acquire_data() {
+    // Initialize and allocate memory for x_in and x_out
+    x_out = (float *)calloc(buff_size, sizeof(float));
+    x_in = (float *)calloc(buff_size, sizeof(float));
+
+
+   // Initialization of API
+    if (rp_Init() != RP_OK)
+    {
+        fprintf(stderr, "Red Pitaya API init failed!\n");
+        return EXIT_FAILURE;
+    }
+    else
+    {
+        printf("Initialisation of RedPitaya API done!\n");
+    }
+
+
+    //Configure ADC
+    rp_AcqReset();
+    rp_AcqSetDecimation(1);
+
+    //Configure DAC
+
+    //Set arbitrary waveform
+    rp_GenWaveform(RP_CH_2, RP_WAVEFORM_ARBITRARY);
+
+    // Enable burst mode
+    rp_GenMode(RP_CH_2, RP_GEN_MODE_BURST);
+
+    // set burst count
+    rp_GenBurstCount(RP_CH_2, bcounts);
+
+    // set burst repetitions
+    rp_GenBurstRepetitions(RP_CH_2, breps);
+
+    //Set Generation Frequency
+    rp_GenFreq(RP_CH_2, freq);
+
+    clock_t t;
+
+
+  int position = find_min_hamming_position(x_in, x_out);
 
     if (position != -1) {
         printf("Position of the substring with the least Hamming distance: %d\n", position);
     } else {
         printf("No valid position found.\n");
     }
+    // Release Red Pitaya resources
+    rp_Release();
+}
 
+
+   // Free allocated memory
+   // free(x_in);
+   // free(x_out);
     return 0;
 }
 
