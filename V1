@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+// Function to calculate Hamming distance between two strings of equal length
+int hamming_distance(const char *s1, const char *s2, int length) {
+    int distance = 0;
+    for (int i = 0; i < length; i++) {
+        if (s1[i] != s2[i]) {
+            distance++;
+        }
+    }
+    return distance;
+}
+
+int find_min_hamming_position(const char *x_in, const char *x_out) {
+    int min_distance = 4;  // Initialize with the maximum possible Hamming distance
+    int min_position = -1; // Initialize with an invalid position
+
+    // Ensure x_out has at least 4 characters
+    if (strlen(x_out) < 4) {
+        printf("x_out should have at least 4 characters.\n");
+        return -1;
+    }
+
+    int length = 4; // Length of the substrings to compare
+    int num_subsets = strlen(x_out) - length + 1; // Number of possible subsets
+
+    for (int i = 0; i < num_subsets; i++) {
+        const char *substring = x_out + i; // Pointer to the current substring of x_out
+        int distance = hamming_distance(x_in, substring, length);
+
+        // Check if the current Hamming distance is less than the minimum found so far
+        if (distance < min_distance) {
+            min_distance = distance;
+            min_position = i;
+        }
+    }
+
+    return min_position;
+}
+
+int main() {
+    const char *x_in = "1101"; 
+    const char *x_out = "101110101";
+
+    int position = find_min_hamming_position(x_in, x_out);
+
+    if (position != -1) {
+        printf("Position of the substring with the least Hamming distance: %d\n", position);
+    } else {
+        printf("No valid position found.\n");
+    }
+
+    return 0;
+}
+
