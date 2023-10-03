@@ -67,8 +67,8 @@ int find_min_hamming_position(const char *x_in, const char *x_out) {
 
 static void acquire_data() {
     // Initialize and allocate memory for x_in and x_out
-    x_out = (float *)calloc(buff_size, sizeof(float));
-    x_in = (float *)calloc(buff_size, sizeof(float));
+    char *x_out = (char*)calloc(buff_size, sizeof(char));
+    char *x_in = (char *)calloc(buff_size, sizeof(char));
 
     // Initialization of Red Pitaya API
     if (rp_Init() != RP_OK) {
@@ -103,7 +103,7 @@ static void acquire_data() {
     // Perform data acquisition
 
     // Fill DAC buffer
-    rp_GenArbWaveform(RP_CH_2, x_out, buff_size);
+    rp_GenArbWaveform(RP_CH_2, (float *)x_out, buff_size);
 
     // Reset Acquisition to Defaults
     rp_AcqReset();
@@ -128,7 +128,7 @@ static void acquire_data() {
     } while (state == RP_TRIG_STATE_TRIGGERED);
 
     // Get data from buffer to code
-    rp_AcqGetOldestDataV(RP_CH_1, &buff_size, x_in);
+    rp_AcqGetOldestDataV(RP_CH_1, &buff_size, (float *)x_in);
 
     // Stop acquisition
     rp_AcqStop();
