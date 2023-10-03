@@ -25,6 +25,7 @@ int t1 = 7830;  //16384+3900;
 int t2 = 8150;  //3900+16384+1200;
 int breps = 1;  // 3
 int bcounts = 1;
+float freq = 7630.0;
 
 // Function to calculate Hamming distance between two strings of equal length
 int hamming_distance(const char *s1, const char *s2, int length) {
@@ -136,7 +137,7 @@ static void acquire_data() {
     rp_GenOutDisable(RP_CH_2);
 
     // Set new trigger delay
-    trig_delay = min_position;
+    trig_delay = t2;
 
     // Release Red Pitaya resources
     rp_Release();
