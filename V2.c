@@ -17,7 +17,8 @@
 // Global variables
 float *x_in;
 float *x_out;
-int buff_size = BUFFER_SIZE;
+//int buff_size = BUFFER_SIZE;
+uint32_t buff_size = BUFFER_SIZE;
 int trig_delay;
 float ascale = 1.005;
 int p_step = 1000;
