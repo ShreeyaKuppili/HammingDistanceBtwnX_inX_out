@@ -9,20 +9,43 @@ float *x_out; // DAC waveform buffer
 uint32_t buff_size = BUFFER_SIZE;
 float hamming_distance = 0.0;
 
-float calculate_hamming_distance(float *x1, float *x2, uint32_t size) {
-    if (x1 == NULL || x2 == NULL) {
-        return -1.0; // Error
+// Function to calculate Hamming distance between two strings of equal length
+int hamming_distance(const char *s1, const char *s2, int length) {
+    int distance = 0;
+    for (int i = 0; i < length; i++) {
+        if (s1[i] != s2[i]) {
+            distance++;
+        }
     }
-
-    float distance = 0.0;
-
-    for (uint32_t i = 0; i < size; i++) {
-        distance += fabs(x1[i] - x2[i]);
-    }
-
     return distance;
 }
 
+int find_min_hamming_position(const char *x_in, const char *x_out) {
+    int min_distance = 25;  // Initialize with the maximum possible Hamming distance
+    int min_position = -1; // Initialize with an invalid position
+
+    // Ensure x_out has at least 4 characters
+    if (strlen(x_out) < 25) {
+        printf("x_out should have at least 4 characters.\n");
+        return -1;
+    }
+
+    int length = 25; // Length of the substrings to compare
+    int num_subsets = strlen(x_out) - length + 1; // Number of possible subsets
+
+    for (int i = 0; i < num_subsets; i++) {
+        const char *substring = x_out + i; // Pointer to the current substring of x_out
+        int distance = hamming_distance(x_in, substring, length);
+
+        // Check if the current Hamming distance is less than the minimum found so far
+        if (distance < min_distance) {
+            min_distance = distance;
+            min_position = i;
+        }
+    }
+
+    return min_position;
+}
 
 int main(int argc, char **argv) {
     // Initialize Red Pitaya resources
