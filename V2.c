@@ -24,9 +24,9 @@ int find_min_hamming_position(const char *x_in, const char *x_out) {
     int min_distance = 25;  // Initialize with the maximum possible Hamming distance
     int min_position = -1; // Initialize with an invalid position
 
-    // Ensure x_out has at least 4 characters
+    // Ensure x_out has at least 25 characters
     if (strlen(x_out) < 25) {
-        printf("x_out should have at least 4 characters.\n");
+        printf("x_out should have at least 25 characters.\n");
         return -1;
     }
 
@@ -81,11 +81,13 @@ int main(int argc, char **argv) {
     rp_AcqStop();
     rp_GenOutDisable(RP_CH_2);
     
-    // Calculate Hamming distance
-    hamming_distance = calculate_hamming_distance(x_in, x_out, buff_size);
-    
-    // Print the Hamming distance
-    printf("Hamming distance: %f\n", hamming_distance);
+    int position = find_min_hamming_position(x_in, x_out);
+
+    if (position != -1) {
+        printf("Position of the substring with the least Hamming distance: %d\n", position);
+    } else {
+        printf("No valid position found.\n");
+    }
     
     // Release Red Pitaya resources and free memory
     rp_Release();
