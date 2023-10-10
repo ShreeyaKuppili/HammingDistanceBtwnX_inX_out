@@ -4,7 +4,7 @@
 #include <math.h>
 #include "rp.h"
 
-#define BUFFER_SIZE (16 * 1024) // Adjust buffer size as needed
+#define BUFFER_SIZE (16 * 1024) // Adjust the buffer size in Lab
 #define SAMPLES_PER_BIT 16
 #define BITS_TO_COMPARE 25
 
