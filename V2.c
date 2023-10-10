@@ -40,16 +40,16 @@ int hamming_distance(const char *s1, const char *s2, int length) {
 }
 
 int find_min_hamming_position(const char *x_in, const char *x_out) {
-    int min_distance = 4;  // Initialize with the maximum possible Hamming distance
+    int min_distance = 25;  // Initialize with the maximum possible Hamming distance
     int min_position = -1; // Initialize with an invalid position
 
     // Ensure x_out has at least 4 characters
-    if (strlen(x_out) < 4) {
+    if (strlen(x_out) < 25) {
         printf("x_out should have at least 4 characters.\n");
         return -1;
     }
 
-    int length = 4; // Length of the substrings to compare
+    int length = 25; // Length of the substrings to compare
     int num_subsets = strlen(x_out) - length + 1; // Number of possible subsets
 
     for (int i = 0; i < num_subsets; i++) {
