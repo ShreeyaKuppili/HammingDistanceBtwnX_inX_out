@@ -42,6 +42,9 @@ int find_min_hamming_position(const float *x_in, const float *x_out) {
             min_distance = distance;
             min_position = i;
         }
+        if (min_distance == 0) {
+            break; // If minimum distance is zero, we found the first match
+        }
     }
 
     return min_position;
