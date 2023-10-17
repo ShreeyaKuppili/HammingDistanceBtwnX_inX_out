@@ -7,8 +7,8 @@
 #define N 4  // Samples per bit
 
 float *x_in;
+float *x_out;  // Data acquired from the Red Pitaya device
 uint32_t buff_size = BUFFER_SIZE;
-int min_hamming_position = -1;
 
 // Function to find the position with the minimum Hamming distance
 int find_min_hamming_position(const float *x_in, const float *x_out, int length) {
@@ -59,8 +59,8 @@ int main(int argc, char **argv) {
     rp_AcqGetOldestDataV(RP_CH_2, &buff_size, x_in); // Change to the appropriate channel (e.g., RP_CH_2)
     rp_AcqStop();
 
-    // Create a random bit pattern for comparison (x_out)
-    // You can provide x_out using the same code or manually generate it if needed
+    // Read x_out from the Red Pitaya device (acquired externally)
+    // You should add code here to read the signal from the device
 
     // Find the position with the least Hamming distance
     int position = find_min_hamming_position(x_in, x_out, M * N);
