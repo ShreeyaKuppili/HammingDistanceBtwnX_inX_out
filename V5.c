@@ -28,7 +28,6 @@ float calculate_hamming_distance(const float *x1, const float *x2, int length) {
 
 // Function to find the position with the minimum Hamming distance
 int find_min_hamming_position(const float *x_in, const float *x_out) {
-    int min_distance = 25 * SAMPLES_PER_BIT;
     int min_position = -1;
 
     int length = BITS_TO_COMPARE * SAMPLES_PER_BIT;
@@ -37,15 +36,16 @@ int find_min_hamming_position(const float *x_in, const float *x_out) {
     for (int i = 0; i < num_subsets; i++) {
         const float *subset = &x_out[i];
         float distance = calculate_hamming_distance(x_in, subset, length);
-        
-        if (min_distance == 0) {
+
+        if (distance == 0) {
             min_position = i;
-            break; // If minimum distance is zero, we found the first match
+            break; // Exit the loop after finding the first match with Hamming distance 0
         }
     }
 
     return min_position;
 }
+
 
 int main(int argc, char **argv) {
     // Initialize Red Pitaya resources
