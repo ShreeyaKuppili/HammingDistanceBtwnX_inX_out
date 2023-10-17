@@ -66,7 +66,7 @@ int main(int argc, char **argv) {
     }
 
     // Allocate memory for ADC buffer
-    x_in = (float *)malloc(buff_size * sizeof(float);
+    x_in = (float *)malloc(buff_size * sizeof(float));
 
     if (x_in == NULL || x_out == NULL) {
         fprintf(stderr, "Memory allocation failed!\n");
