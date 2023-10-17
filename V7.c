@@ -53,14 +53,11 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    // Perform data acquisition from the externally routed signal
+    // Perform data acquisition from Channel 2 (RP_CH_2) where the signal is routed externally
     rp_AcqStart();
     rp_AcqSetTriggerSrc(RP_TRIG_SRC_NOW);
-    rp_AcqGetOldestDataV(RP_CH_2, &buff_size, x_in); // Change to the appropriate channel (e.g., RP_CH_2)
+    rp_AcqGetOldestDataV(RP_CH_2, &buff_size, x_out); // Acquire data from Channel 2
     rp_AcqStop();
-
-    // Read x_out from the Red Pitaya device (acquired externally)
-    // You should add code here to read the signal from the device
 
     // Find the position with the least Hamming distance
     int position = find_min_hamming_position(x_in, x_out, M * N);
