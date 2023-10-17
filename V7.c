@@ -3,7 +3,7 @@
 #include "rp.h"
 
 #define BUFFER_SIZE (16 * 1024)
-#define M 8  // Number of bits to compare
+#define M 25  // Number of bits to compare
 #define N 4  // Samples per bit
 
 float *x_in;
@@ -45,18 +45,27 @@ int main(int argc, char **argv) {
     rp_AcqReset();
     rp_AcqSetDecimation(1);
 
-    // Allocate memory for ADC buffer
+    // Allocate memory for ADC buffer (x_in)
     x_in = (float *)malloc(buff_size * sizeof(float));
 
     if (x_in == NULL) {
-        fprintf(stderr, "Memory allocation failed!\n");
+        fprintf(stderr, "Memory allocation for x_in failed!\n");
         return 1;
+    }
+
+    // Generate random data for DAC (x_out)
+    srand(time(NULL)); // Seed the random number generator
+    for (int i = 0; i < buff_size; i++) {
+        x_out[i] = (float)(rand() % 2); // Generates random binary data (0 or 1)
     }
 
     // Perform data acquisition from Channel 2 (RP_CH_2) where the signal is routed externally
     rp_AcqStart();
     rp_AcqSetTriggerSrc(RP_TRIG_SRC_NOW);
-    rp_AcqGetOldestDataV(RP_CH_2, &buff_size, x_out); // Acquire data from Channel 2
+    if (rp_AcqGetOldestDataV(RP_CH_2, &buff_size, x_out) != RP_OK) {
+        fprintf(stderr, "Data acquisition failed!\n");
+        return 1;
+    }
     rp_AcqStop();
 
     // Find the position with the least Hamming distance
