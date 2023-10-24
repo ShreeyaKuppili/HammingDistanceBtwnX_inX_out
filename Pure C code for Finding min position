@@ -8,9 +8,10 @@
 #define BITS_TO_COMPARE 25
 
 // Define the lengths for x_in and x_out
-#define X_IN_LENGTH 100
-#define X_OUT_LENGTH 170
-#define K 16
+#define K 20
+
+#define X_IN_LENGTH 1600
+#define X_OUT_LENGTH 2720
 
 bool x_in[X_IN_LENGTH];
 bool x_out[X_OUT_LENGTH];
@@ -49,8 +50,11 @@ int main() {
     srand(time(NULL));
 
     // Generate random binary data for x_out
-    for (int i = 0; i < X_OUT_LENGTH; i++) {
-        x_out[i] = rand() & 1; // Random binary digit (0 or 1)
+    for (int i = 0; i < X_OUT_LENGTH; i+= SAMPLES_PER_BIT) {
+        x_out[i] = rand() & 1;
+        for(int j = 1; j < SAMPLES_PER_BIT; j++){
+            x_out[i+j] = x_out[i];
+        }
     }
 
     // Generate x_in by taking 25 random digits from x_out
