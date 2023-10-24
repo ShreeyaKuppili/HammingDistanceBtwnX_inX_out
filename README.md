@@ -19,11 +19,11 @@ The difference between these timestamps represents the time taken for the signal
 
 **V6:**
 In V6 I only used the time function to see what was happening in this. 
-V7(With hardware RedPitaya):
 
+**V7(With hardware RedPitaya):**
 Here I realized that the code was not using hardware to transfer the binary sequence, so then I created a function to receive the data from the external cable. But this didn’t work either as I was getting a “Segmentation Error” even after multiple tries of debugging using gbp and trying to allocate memory properly.
 
-#This is the Compilation of the working code:
+# This is the Compilation of the working code:
 
 **Pure C code for Finding min position:**
 This Code takes a binary array x_in and an array x_out that is the same as x_in after K bits, takes the first 25 bits of x_in (sampled at 16 samples per bit), compares the Hamming distance of it with each 25 consecutive binary valued subset of x_out, and then returns the position of the minimum Hamming distance, as well as the Hamming Distance of that position.
