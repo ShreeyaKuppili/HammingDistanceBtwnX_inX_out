@@ -15,8 +15,8 @@
 #define X_IN_LENGTH 1600
 #define X_OUT_LENGTH 2720
 
-bool x_in;
-bool x_out;
+float *x_in;
+float *x_out;
 uint32_t buff_size = BUFFER_SIZE;
 
 // Function to calculate Hamming distance between two arrays
