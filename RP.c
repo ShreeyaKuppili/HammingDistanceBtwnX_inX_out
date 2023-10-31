@@ -30,6 +30,20 @@ int calculate_hamming_distance(const float *x1, const float *x2, int length) {
     return distance;
 }
 
+int find_min_hamming_position(const float *x_in, const float *x_out, int in_length, int out_length, int *min_position) {
+    int min_distance = X_LENGTH + 1;
+    *min_position = -1;
+
+    for (int i = 0; i <= out_length - in_length; i++) {
+        int distance = calculate_hamming_distance(x_in, &x_out[i], in_length);
+        if (distance < min_distance) {
+            min_distance = distance;
+            *min_position = i;
+        }
+    }
+    return min_distance;
+}
+
 int main(int argc, char **argv) {
     // Seed the random number generator
     srand(time(NULL));
@@ -81,9 +95,11 @@ int main(int argc, char **argv) {
 
     rp_AcqStop();
 
-    int min_distance = calculate_hamming_distance(x_in, x_out, X_LENGTH);
+    int min_position;
+    int min_distance = find_min_hamming_position(x_in, x_out, X_LENGTH, X_LENGTH, &min_position);
 
     printf("Minimum Hamming Distance: %d\n", min_distance);
+    printf("Position with Minimum Distance: %d\n", min_position);
 
     // Release Red Pitaya resources (no need to free x_in as it's not dynamically allocated)
     rp_Release();
