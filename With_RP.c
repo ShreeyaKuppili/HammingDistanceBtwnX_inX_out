@@ -20,7 +20,7 @@ float *x_out;
 uint32_t buff_size = BUFFER_SIZE;
 
 // Function to calculate Hamming distance between two arrays
-int calculate_hamming_distance(const bool *x1, const bool *x2, int length) {
+int calculate_hamming_distance(float *x1, float *x2, int length) {
     int distance = 0;
 
     for (int i = 0; i < length; i++) {
@@ -32,7 +32,7 @@ int calculate_hamming_distance(const bool *x1, const bool *x2, int length) {
     return distance;
 }
 
-int find_min_hamming_position(const bool *x_in, const bool *x_out, int in_length, int out_length) {
+int find_min_hamming_position(float *x_in, float *x_out, int in_length, int out_length) {
     int min_distance = X_OUT_LENGTH + 1;
     int min_position = -1;
 
