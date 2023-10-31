@@ -6,17 +6,17 @@
 
 #include "rp.h"
 
-#define BUFFER_SIZE (16 * 1024)
+#define BUFFER_SIZE (10000)
 #define SAMPLES_PER_BIT 16
 #define BITS_TO_COMPARE 25
 
 // Define the lengths for x_in and x_out
 
-#define X_IN_LENGTH 1600
-#define X_OUT_LENGTH 2720
+#define X_IN_LENGTH 4000
+#define X_OUT_LENGTH 4000
 
-float *x_in;
-float *x_out;
+float *x_in[X_IN_LENGTH];
+float *x_out[X_OUT_LENGTH];
 uint32_t buff_size = BUFFER_SIZE;
 
 // Function to calculate Hamming distance between two arrays
