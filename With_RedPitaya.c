@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include rp.h
+
 #define SAMPLES_PER_BIT 16
 #define BITS_TO_COMPARE 25
 
