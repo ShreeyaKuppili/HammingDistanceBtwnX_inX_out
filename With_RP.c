@@ -61,14 +61,10 @@ int main(int argc, char **argv) {
     // Configure ADC
     rp_AcqReset();
     rp_AcqSetDecimation(1);
-
-    // Allocate memory for x_in
+    
+// Allocate memory for x_in and x_out
     for (int i = 0; i < buff_size; i++) {
     x_in[i] = (float *)malloc(sizeof(float));
-}
-
-    // Allocate memory for x_out
-    for (int i = 0; i < buff_size; i++) {
     x_out[i] = (float *)malloc(sizeof(float));
 }
 
@@ -86,6 +82,7 @@ int main(int argc, char **argv) {
 }
 
 
+
     // Perform data acquisition from Channel 2 (RP_CH_2) where the signal is routed externally
     rp_AcqStart();
     rp_AcqSetTriggerSrc(RP_TRIG_SRC_NOW);
@@ -96,6 +93,7 @@ int main(int argc, char **argv) {
     rp_AcqStop();
     int min_position = find_min_hamming_position(x_in, x_out, BITS_TO_COMPARE * SAMPLES_PER_BIT, X_OUT_LENGTH);
     int min_distance = calculate_hamming_distance(x_in, &x_out[min_position], BITS_TO_COMPARE * SAMPLES_PER_BIT);
+
 
     printf("Minimum Hamming Distance: %d\n", min_distance);
     printf("Position with Minimum Distance: %d\n", min_position);
