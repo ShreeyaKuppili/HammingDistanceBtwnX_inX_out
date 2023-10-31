@@ -16,7 +16,7 @@
 #define X_OUT_LENGTH 4000
 
 float *x_in[X_IN_LENGTH];
-float *x_out[X_OUT_LENGTH];
+float x_out[X_OUT_LENGTH];
 uint32_t buff_size = BUFFER_SIZE;
 
 // Function to calculate Hamming distance between two arrays
@@ -62,8 +62,17 @@ int main(int argc, char **argv) {
     rp_AcqReset();
     rp_AcqSetDecimation(1);
 
-    // Allocate memory for ADC buffer (x_in)
-    x_in = (float **)malloc(buff_size * sizeof(float));
+    // Allocate memory for x_in
+    for (int i = 0; i < buff_size; i++) {
+    x_in[i] = (float *)malloc(sizeof(float));
+}
+
+    // Allocate memory for x_out
+    for (int i = 0; i < buff_size; i++) {
+    x_out[i] = (float *)malloc(sizeof(float));
+}
+
+
 
     if (x_in == NULL) {
         fprintf(stderr, "Memory allocation for x_in failed!\n");
@@ -73,8 +82,9 @@ int main(int argc, char **argv) {
     // Generate random data for DAC (x_out)
     srand(time(NULL)); // Seed the random number generator
     for (int i = 0; i < buff_size; i++) {
-        x_out[i] = (float)(rand() % 2); // Generates random binary data (0 or 1)
-    }
+    x_out[i][0] = (float)rand() / RAND_MAX; // Generates random floating-point values between 0 and 1
+}
+
 
     // Perform data acquisition from Channel 2 (RP_CH_2) where the signal is routed externally
     rp_AcqStart();
