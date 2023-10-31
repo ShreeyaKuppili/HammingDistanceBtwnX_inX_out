@@ -6,6 +6,7 @@
 
 #include "rp.h"
 
+#define BUFFER_SIZE (16 * 1024)
 #define SAMPLES_PER_BIT 16
 #define BITS_TO_COMPARE 25
 
@@ -16,6 +17,7 @@
 
 bool x_in;
 bool x_out;
+uint32_t buff_size = BUFFER_SIZE;
 
 // Function to calculate Hamming distance between two arrays
 int calculate_hamming_distance(const bool *x1, const bool *x2, int length) {
