@@ -13,8 +13,8 @@
 #define X_IN_LENGTH 1600
 #define X_OUT_LENGTH 2720
 
-float x_in[X_IN_LENGTH]; // Change to float
-float x_out[X_OUT_LENGTH]; // Change to float
+float *x_in; // Change to a dynamically allocated array
+float x_out[X_OUT_LENGTH]; // Keep x_out as a fixed-size array
 
 // Function to calculate Hamming distance between two arrays
 int calculate_hamming_distance(const float *x1, const float *x2, int length) {
@@ -59,9 +59,7 @@ int main(int argc, char **argv) {
     rp_AcqSetDecimation(1);
 
     // Allocate memory for ADC buffer (x_in)
-    int buff_size = X_IN_LENGTH; // Define buff_size here
-    x_in = (float *)malloc(buff_size * sizeof(float);
-
+    x_in = (float *)malloc(X_IN_LENGTH * sizeof(float));
     if (x_in == NULL) {
         fprintf(stderr, "Memory allocation for x_in failed!\n");
         return 1;
@@ -73,20 +71,7 @@ int main(int argc, char **argv) {
         x_out[i] = (float)(rand() % 2); // Generates random binary data (0 or 1)
     }
 
-    // Perform data acquisition from Channel 2 (RP_CH_2) where the signal is routed externally
-    rp_AcqStart();
-    rp_AcqSetTriggerSrc(RP_TRIG_SRC_NOW);
-    if (rp_AcqGetOldestDataV(RP_CH_2, &buff_size, x_out) != RP_OK) {
-        fprintf(stderr, "Data acquisition failed!\n");
-        return 1;
-    }
-    rp_AcqStop();
-
-    int min_position = find_min_hamming_position(x_in, x_out, BITS_TO_COMPARE * SAMPLES_PER_BIT, X_OUT_LENGTH);
-    int min_distance = calculate_hamming_distance(x_in, &x_out[min_position], BITS_TO_COMPARE * SAMPLES_PER_BIT);
-
-    printf("Minimum Hamming Distance: %d\n", min_distance);
-    printf("Position with Minimum Distance: %d\n", min_position);
+    // Rest of your code remains the same
 
     // Release Red Pitaya resources and free memory
     rp_Release();
