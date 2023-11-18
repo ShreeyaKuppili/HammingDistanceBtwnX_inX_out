@@ -14,6 +14,7 @@
 
 bool x_in[X_IN_LENGTH];
 bool x_out[X_OUT_LENGTH];
+bool x_previous[X_IN_LENGTH]; // Array to store the previous signal
 
 
 // Function to calculate Hamming distance between two arrays
@@ -61,6 +62,12 @@ int main(int argc, char **argv){
             x_out[i+j] = x_out[i];
         }
     }
+
+    // Initialize the previous signal array with some default values (e.g., all zeros)
+    for (int i = 0; i < X_IN_LENGTH; i++) {
+        x_previous[i] = 0;
+    }
+
 
     // Generate x_in by taking 25 random digits from x_out
     for (int i = 0; i < X_IN_LENGTH; i++) {
@@ -118,11 +125,24 @@ int main(int argc, char **argv){
         rp_AcqGetBufferFillState(&fillState);
     }
 
+    // Store the acquired signal as the newest x_in
     rp_AcqGetOldestDataV(RP_CH_1, &buff_size, buff);
-    int i;
-    for(i = 0; i < buff_size; i++){
-        printf("%f\n", buff[i]);
+    for(int i = 0; i < X_IN_LENGTH; i++) {
+        x_in[i] = buff[i] > 0.5; // Assuming a threshold for binary conversion
     }
+
+
+ // Calculate Hamming distance and position between the current and previous signals
+        int position = find_min_hamming_position(x_in, x_previous, X_IN_LENGTH, X_IN_LENGTH);
+        int distance = calculate_hamming_distance(x_in, x_previous, X_IN_LENGTH);
+        printf("Hamming Distance: %d\n", distance);
+        printf("Min Position: %d\n", position);
+
+ // Update the previous signal with the current signal for the next iteration
+        for (int i = 0; i < X_IN_LENGTH; i++) {
+            x_previous[i] = x_in[i];
+        }
+
 
     /* Releasing resources */
     free(buff);
